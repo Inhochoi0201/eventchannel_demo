@@ -40,17 +40,33 @@ class EventChannelDemo extends StatefulWidget {
 }
 
 class _EventChannelDemoState extends State<EventChannelDemo> {
-  static const EventChannel stream = EventChannel('eventSample/value');
+  static const EventChannel streamX = EventChannel('eventSample/x');
   static const MethodChannel channel = MethodChannel('methodSample/value');
-  Stream<double> rotateStream = const Stream.empty();
 
-  Future<bool> init() async{
-   return await channel.invokeMethod('init');
+  Stream<double> rotateXStream = const Stream.empty();
+
+  Stream<double> exampleStreamX(){
+    rotateXStream = streamX.receiveBroadcastStream().map<double>((event) => event);
+    return rotateXStream;
+  }
+  static const EventChannel streamY = EventChannel('eventSample/y');
+  Stream<double> rotateYStream = const Stream.empty();
+
+  Stream<double> exampleStreamY(){
+    rotateYStream = streamY.receiveBroadcastStream().map<double>((event) => event);
+    return rotateYStream;
   }
 
-  Stream<double> exampleStream(){
-    rotateStream = stream.receiveBroadcastStream().map<double>((event) => event);
-    return rotateStream;
+  static const EventChannel streamZ = EventChannel('eventSample/z');
+  Stream<double> rotateZStream = const Stream.empty();
+
+  Stream<double> exampleStreamZ(){
+    rotateZStream = streamZ.receiveBroadcastStream().map<double>((event) => event);
+    return rotateZStream;
+  }
+
+  Future<bool> init() async{
+    return await channel.invokeMethod('init');
   }
 
   @override
@@ -66,18 +82,49 @@ class _EventChannelDemoState extends State<EventChannelDemo> {
         appBar: AppBar(
           title: const Text('EventChannel Demo'),
         ),
-        body: StreamBuilder(
-          stream: exampleStream(),
-          builder: (context, snapshot) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text('기울기 x : ${snapshot.data}')
-                ],
-              ),
-            );
-          }
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            StreamBuilder(
+              stream: exampleStreamX(),
+              builder: (context, snapshot) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text('기울기 x : ${snapshot.data}')
+                    ],
+                  ),
+                );
+              }
+            ),
+            StreamBuilder(
+                stream: exampleStreamY(),
+                builder: (context, snapshot) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('기울기 y : ${snapshot.data}')
+                      ],
+                    ),
+                  );
+                }
+            ),
+            StreamBuilder(
+                stream: exampleStreamZ(),
+                builder: (context, snapshot) {
+                  return Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text('기울기 z : ${snapshot.data}')
+                      ],
+                    ),
+                  );
+                }
+            ),
+          ],
         ));
   }
 }
