@@ -91,7 +91,7 @@ class RotateZ implements EventChannel.StreamHandler, SensorEventListener {
     }
     @Override
     public void onSensorChanged(SensorEvent sensorEvent) {
-        z = sensorEvent.values[0];
+        z = sensorEvent.values[2];
         if(rotateSink != null){
             rotateSink.success(z);
         }

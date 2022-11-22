@@ -78,6 +78,7 @@ class _EventChannelDemoState extends State<EventChannelDemo> {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp,DeviceOrientation.portraitDown]);
     return Scaffold(
         appBar: AppBar(
           title: const Text('EventChannel Demo'),
